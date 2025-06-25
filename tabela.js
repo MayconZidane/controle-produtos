@@ -6,7 +6,20 @@ let linha = ''
 let produtos = []
 let indexEditado = null
 
-function renderizarTabela() {
+window.onload = () => {
+    const dadosSalvos = localStorage.getItem('produtoStorage')
+
+        if (dadosSalvos) {
+            produtos = JSON.parse(dadosSalvos)
+            renderizarTabela()
+        }
+    }
+
+    function salvarProduto() {
+        localStorage.setItem('produtoStorage', JSON.stringify(produtos))
+    }
+
+    function renderizarTabela() {
     linha = ''
 
     produtos.forEach((p, index) => linha += `
@@ -31,6 +44,7 @@ function addProduto() {
         preco: Number(precoProduto.value)
     })
 
+    salvarProduto()
     renderizarTabela()
 
     descricaoProduto.value = ''
@@ -51,6 +65,7 @@ function atualizarProduto() {
     produtos[indexEditado].descricao = descricaoProduto.value
     produtos[indexEditado].preco = Number(precoProduto.value)
 
+    salvarProduto()
     renderizarTabela()
     
     descricaoProduto.value = ''
@@ -63,5 +78,8 @@ function atualizarProduto() {
 function removerProduto(index) {
     const produto = produtos[index]
     produtos.splice(index, 1)
+
+
+    salvarProduto()
     renderizarTabela()
 }
